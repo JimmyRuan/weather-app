@@ -11,8 +11,9 @@ local-rebuild:
 	docker-compose -f docker-compose.dev.yml up --build --force-recreate --renew-anon-volumes --no-deps -d
 
 .PHONY: local-setup
-local-set:
+local-setup:
 	bundle install
+	bundle exec rails db:migrate
 
 
 
