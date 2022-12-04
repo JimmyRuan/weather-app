@@ -32,6 +32,24 @@ module WrapperErrors::Errors
     end
   end
 
+  class WeatherWrapperError < BaseError
+    def api_context
+      'Open Weather Map API endpoint'
+    end
+  end
+
+  ### Below are the errors for the open weather api errors
+  class NoInvalidOpenWeatherApiKey < WeatherWrapperError
+    def message
+      'The open weather api key is invalid'
+    end
+  end
+
+
+
+
+  ### Below are the errors for Google Map errors
+
   class NoInvalidGoogleMapApiKey < AddressWrapperError
     def message
       'The google map api key is invalid'

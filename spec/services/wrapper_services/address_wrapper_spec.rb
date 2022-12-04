@@ -27,10 +27,12 @@ RSpec.describe WrapperServices::AddressWrapper do
           to_return(status: 200, body: json_response_str, headers: {})
 
 
-        zip_code, country_code = WrapperServices::AddressWrapper.new.fetch_geo_info(address: address)
+        actual_address_info = WrapperServices::AddressWrapper.new.fetch_geo_info(address: address)
 
-        expect(zip_code).to eq('94043')
-        expect(country_code).to eq('us')
+        expect(actual_address_info.zip_code).to eq('94043')
+        expect(actual_address_info.country_code).to eq('US')
+        expect(actual_address_info.latitude).to eq(37.4223878)
+        expect(actual_address_info.longitude).to eq(-122.0841877)
       end
     end
   end
