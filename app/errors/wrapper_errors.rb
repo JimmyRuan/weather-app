@@ -1,0 +1,2 @@
+module WrapperErrors
+end

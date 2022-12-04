@@ -38,3 +38,11 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# development key is used for decrypting credentials
+/config/credentials/development.key
+
+# allow customizerable development credentials
+config/credentials/development.yml.enc
+
+
