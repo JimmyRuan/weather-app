@@ -13,6 +13,16 @@ module WrapperServices
       raise WrapperErrors::Errors::NoInvalidOpenWeatherApiKey unless @weather_map_api_key
     end
 
+    def weather_summary(latitude:, longitude:)
+      current_weather = current_weather(latitude: latitude, longitude: longitude)
+      weather_forecast_list = weather_forecast(latitude: latitude, longitude: longitude)
+
+      {
+        current_weather: current_weather.to_hash,
+        forecasts: weather_forecast_list.map(&:to_hash)
+      }
+    end
+
     def current_weather(latitude:, longitude:)
       response = weather_client.get(CURRENT_WEATHER_PATH) do |request|
         request.params['appid'] = @weather_map_api_key
@@ -88,17 +98,5 @@ module WrapperServices
 
       provided_total
     end
-
-    # def hydrate_weather_dto(main_weather, add_time: true)
-    #   WrapperDto::WeatherDto.new(
-    #     current_temp: main_weather[:temp],
-    #     min_temp: main_weather[:temp_min],
-    #     max_temp: main_weather[:temp_max],
-    #     humidity: main_weather[:humidity],
-    #     weather_type: weather_type,
-    #     timestamp: nil,
-    #     timezone: nil
-    #   )
-    # end
   end
 end

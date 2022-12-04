@@ -5,8 +5,6 @@ RSpec.describe WrapperServices::WeatherWrapper do
   describe '#current_weather' do
     context 'valid latitude and longitude is provided' do
       it 'returns valid weather info' do
-        current_time = Time.now.utc
-        Timecop.freeze(current_time)
         longitude = -122.0841877
         latitude = 37.4223878
         weather_api_key = 'valid-api-key'
@@ -81,6 +79,58 @@ RSpec.describe WrapperServices::WeatherWrapper do
         expect(weather_dto.weather_type).to eq('Rain')
         expect(weather_dto.timestamp).to eq('2022-12-04 09:00:00')
         expect(weather_dto.timezone).to eq(-28800)
+      end
+    end
+  end
+
+  describe '#weather_summary' do
+    context 'valid current weather and weather forecast available' do
+      it 'returns weather summary' do
+        longitude = -122.0841877
+        latitude = 37.4223878
+        weather_api_key = 'valid-api-key'
+        json_response_str1 = File.read("#{Rails.root}/spec/fixtures/current_weather_example.json")
+        json_response_str2 = File.read("#{Rails.root}/spec/fixtures/weather_forecast_example.json")
+
+        stub_request(:get, "http://api.openweathermap.org/data/2.5/weather?appid=valid-api-key&lat=37.4223878&lon=-122.0841877&units=imperial").
+          with(
+            headers: {
+              'Accept'=>'application/json',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'Content-Type'=>'application/json',
+              'User-Agent'=>'Weather App Agent'
+            }).
+          to_return(status: 200, body: json_response_str1, headers: {})
+
+        stub_request(:get, "http://api.openweathermap.org/data/2.5/forecast?appid=valid-api-key&lat=37.4223878&lon=-122.0841877&units=imperial").
+          with(
+            headers: {
+              'Accept'=>'application/json',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'Content-Type'=>'application/json',
+              'User-Agent'=>'Weather App Agent'
+            }).
+          to_return(status: 200, body: json_response_str2, headers: {})
+
+
+
+        Rails.application.credentials.open_weather_api_key = weather_api_key
+
+        weather_wrapper = WrapperServices::WeatherWrapper.new
+        weather_summary = weather_wrapper.weather_summary(latitude: latitude, longitude: longitude)
+        expected_current_weather = {
+          current_temperature: 48.45,
+          minimum_temperature: 46.22,
+          maximum_temperature: 51.89,
+          weather_condition: "Mist"
+        }
+
+        expected_forecast_keys = %i[current_temperature minimum_temperature maximum_temperature weather_condition timestamp timezone]
+
+        expect(weather_summary.keys).to eq(%i[current_weather forecasts])
+        expect(weather_summary[:current_weather]).to eq(expected_current_weather)
+        expect(weather_summary[:forecasts].count).to eq(40)
+        expect(weather_summary[:forecasts][0].keys).to eq(expected_forecast_keys)
       end
     end
   end
