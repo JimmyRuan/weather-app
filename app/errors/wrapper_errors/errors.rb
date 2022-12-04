@@ -45,6 +45,12 @@ module WrapperErrors::Errors
     end
   end
 
+  class NoMainWeatherInfo < WeatherWrapperError
+    def message
+      'There are no valid current weather info available'
+    end
+  end
+
 
 
 

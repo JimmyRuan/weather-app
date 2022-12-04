@@ -1,0 +1,43 @@
+{
+  "coord": {
+    "lon": -122.0842,
+    "lat": 37.4224
+  },
+  "weather": [
+    {
+      "id": 701,
+      "main": "Mist",
+      "description": "mist",
+      "icon": "50n"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 48.45,
+    "feels_like": 43.99,
+    "temp_min": 46.22,
+    "temp_max": 51.89,
+    "pressure": 1016,
+    "humidity": 94
+  },
+  "visibility": 6437,
+  "wind": {
+    "speed": 10.36,
+    "deg": 150
+  },
+  "clouds": {
+    "all": 75
+  },
+  "dt": 1670164843,
+  "sys": {
+    "type": 2,
+    "id": 2079179,
+    "country": "US",
+    "sunrise": 1670166427,
+    "sunset": 1670201429
+  },
+  "timezone": -28800,
+  "id": 5375480,
+  "name": "Mountain View",
+  "cod": 200
+}

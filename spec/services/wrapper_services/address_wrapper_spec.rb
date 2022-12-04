@@ -5,7 +5,6 @@ RSpec.describe WrapperServices::AddressWrapper do
   describe "#fetch_geo_code" do
     context 'valid address is provided' do
       it 'fetches the geo_code info from the address' do
-
         address = '1600 Amphitheatre Parkway Mountain View, CA 94043'
         google_map_key = 'valid-google-map-key'
         expected_host = WrapperServices::AddressWrapper::GOOGLE_MAP_HOST
