@@ -51,6 +51,18 @@ module WrapperErrors::Errors
     end
   end
 
+  class NoWeatherForecastInfo < WeatherWrapperError
+    def message
+      'There are no valid weather forecast info available'
+    end
+  end
+
+  class NoTimeInfoForWeather < WeatherWrapperError
+    def message
+      'There is no valid time info for the weather forecast'
+    end
+  end
+
 
 
 
