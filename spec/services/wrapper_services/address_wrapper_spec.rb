@@ -11,7 +11,6 @@ RSpec.describe WrapperServices::AddressWrapper do
         expected_get_geo_path = WrapperServices::AddressWrapper::GET_GEO_INFO_PATH
 
         json_response_str = File.read("#{Rails.root}/spec/fixtures/google_map_info_example.json")
-        geo_info_json = JSON.parse(json_response_str)
 
         Rails.application.credentials.google_map_key = google_map_key
 

@@ -19,7 +19,8 @@ module WrapperServices
 
       {
         current_weather: current_weather.to_hash,
-        forecasts: weather_forecast_list.map(&:to_hash)
+        forecasts: weather_forecast_list.map(&:to_hash),
+        created_at: Time.now.utc.to_s(:d)
       }
     end
 

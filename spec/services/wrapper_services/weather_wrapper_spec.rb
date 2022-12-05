@@ -86,6 +86,8 @@ RSpec.describe WrapperServices::WeatherWrapper do
   describe '#weather_summary' do
     context 'valid current weather and weather forecast available' do
       it 'returns weather summary' do
+        current_time = Time.now.utc
+        Timecop.freeze(current_time)
         longitude = -122.0841877
         latitude = 37.4223878
         weather_api_key = 'valid-api-key'
@@ -112,8 +114,6 @@ RSpec.describe WrapperServices::WeatherWrapper do
             }).
           to_return(status: 200, body: json_response_str2, headers: {})
 
-
-
         Rails.application.credentials.open_weather_api_key = weather_api_key
 
         weather_wrapper = WrapperServices::WeatherWrapper.new
@@ -127,10 +127,11 @@ RSpec.describe WrapperServices::WeatherWrapper do
 
         expected_forecast_keys = %i[current_temperature minimum_temperature maximum_temperature weather_condition timestamp timezone]
 
-        expect(weather_summary.keys).to eq(%i[current_weather forecasts])
+        expect(weather_summary.keys).to eq(%i[current_weather forecasts created_at])
         expect(weather_summary[:current_weather]).to eq(expected_current_weather)
         expect(weather_summary[:forecasts].count).to eq(40)
         expect(weather_summary[:forecasts][0].keys).to eq(expected_forecast_keys)
+        expect(weather_summary[:created_at]).to eq(current_time.to_s(:d))
       end
     end
   end
