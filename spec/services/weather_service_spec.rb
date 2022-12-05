@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe WeatherService do
@@ -12,7 +13,7 @@ RSpec.describe WeatherService do
         location_dto = WrapperDto::LocationDto.new(
           latitude: 123,
           longitude: 456,
-          zip_code: 94043,
+          zip_code: 94_043,
           country_code: 'us'
         )
 
@@ -26,23 +27,21 @@ RSpec.describe WeatherService do
           timezone: 3939
         )
 
-
-        expect_any_instance_of(WrapperServices::AddressWrapper).to receive(:fetch_geo_info).
-          with(address: address_str).and_return(location_dto)
+        expect_any_instance_of(WrapperServices::AddressWrapper).to receive(:fetch_geo_info)
+          .with(address: address_str).and_return(location_dto)
 
         expect_any_instance_of(WrapperServices::WeatherWrapper).to receive(:weather_summary).with(
           latitude: location_dto.latitude,
           longitude: location_dto.longitude
         ).and_return({
-                 current_weather: weather_dto.to_hash,
-                 forecasts: [weather_dto].map(&:to_hash),
-                 created_at: time_now
-               })
-
+                       current_weather: weather_dto.to_hash,
+                       forecasts: [weather_dto].map(&:to_hash),
+                       created_at: time_now
+                     })
 
         expected_weather_summary = WeatherService.new.weather_summary(address: address_str)
 
-        expect(expected_weather_summary.keys).to eq([:current_weather, :forecasts, :created_at, :is_cached])
+        expect(expected_weather_summary.keys).to eq(%i[current_weather forecasts created_at is_cached])
         expect(expected_weather_summary[:current_weather]).to eq(weather_dto.to_hash)
         expect(expected_weather_summary[:forecasts]).to eq([weather_dto.to_hash])
         expect(expected_weather_summary[:created_at]).to eq(time_now)

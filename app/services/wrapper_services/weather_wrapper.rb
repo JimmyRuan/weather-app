@@ -36,7 +36,7 @@ module WrapperServices
       json_response = WrapperHelper.parse_json_response(response)
       main_weather = json_response[:main]
       weather_type = json_response.dig(:weather, 0, :main)
-      raise WrapperErrors::Errors::NoMainWeatherInfo.new if main_weather.blank? || weather_type.blank?
+      raise WrapperErrors::Errors::NoMainWeatherInfo if main_weather.blank? || weather_type.blank?
 
       WrapperDto::WeatherDto.new(
         current_temp: main_weather[:temp],
@@ -63,8 +63,8 @@ module WrapperServices
       WrapperHelper.handle_error_from_response(response)
       json_response = WrapperHelper.parse_json_response(response)
 
-      raise WrapperErrors::Errors::NoWeatherForecastInfo.new if json_response[:list]&.count != 40
-      raise WrapperErrors::Errors::NoTimeInfoForWeather.new if json_response.dig(:city, :timezone).blank?
+      raise WrapperErrors::Errors::NoWeatherForecastInfo if json_response[:list]&.count != 40
+      raise WrapperErrors::Errors::NoTimeInfoForWeather if json_response.dig(:city, :timezone).blank?
 
       timezone = json_response.dig(:city, :timezone)
       forecast_list = json_response[:list]
@@ -72,7 +72,7 @@ module WrapperServices
 
       forecast_list.each do |forecast_info|
         if forecast_info[:main].nil? || forecast_info.dig(:weather, 0, :main).nil? || forecast_info[:dt_txt].nil?
-          raise WrapperErrors::Errors::NoWeatherForecastInfo.new
+          raise WrapperErrors::Errors::NoWeatherForecastInfo
         end
 
         main_weather = forecast_info[:main]
@@ -95,7 +95,7 @@ module WrapperServices
     end
 
     def determine_total_forecasts(provided_total)
-      return MAXIMUM_FORECAST_ITEMS if(provided_total.nil? || provided_total > MAXIMUM_FORECAST_ITEMS)
+      return MAXIMUM_FORECAST_ITEMS if provided_total.nil? || provided_total > MAXIMUM_FORECAST_ITEMS
 
       provided_total
     end

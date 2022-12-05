@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe "Weathers", type: :request do
-  describe "GET /weather_by_address" do
+RSpec.describe 'Weathers', type: :request do
+  describe 'GET /weather_by_address' do
     context 'valid address is provided, and the weather and geo location service is available' do
       it 'returns valid weather info' do
         Rails.application.credentials.google_map_key = 'valid-google-map-key'
@@ -11,7 +11,7 @@ RSpec.describe "Weathers", type: :request do
         location_dto = WrapperDto::LocationDto.new(
           latitude: 123,
           longitude: 456,
-          zip_code: 94043,
+          zip_code: 94_043,
           country_code: 'us'
         )
 
@@ -25,9 +25,8 @@ RSpec.describe "Weathers", type: :request do
           timezone: 3939
         )
 
-
-        expect_any_instance_of(WrapperServices::AddressWrapper).to receive(:fetch_geo_info).
-          with(address: address_str).and_return(location_dto)
+        expect_any_instance_of(WrapperServices::AddressWrapper).to receive(:fetch_geo_info)
+          .with(address: address_str).and_return(location_dto)
 
         expect_any_instance_of(WrapperServices::WeatherWrapper).to receive(:weather_summary).with(
           latitude: location_dto.latitude,
@@ -38,8 +37,7 @@ RSpec.describe "Weathers", type: :request do
                        created_at: time_now
                      })
 
-
-        get '/weather_by_address', params: {address: address_str}
+        get '/weather_by_address', params: { address: address_str }
 
         expect(response).to have_http_status(:ok)
         json_response = JSON.parse(response.body)

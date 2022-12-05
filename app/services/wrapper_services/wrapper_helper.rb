@@ -39,8 +39,5 @@ module WrapperServices
         raise error
       end
     end
-
-
-
   end
 end

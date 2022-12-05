@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe WrapperServices::AddressWrapper do
-  describe "#fetch_geo_code" do
+  describe '#fetch_geo_code' do
     context 'valid address is provided' do
       it 'fetches the geo_code info from the address' do
         address = '1600 Amphitheatre Parkway Mountain View, CA 94043'
@@ -14,16 +15,16 @@ RSpec.describe WrapperServices::AddressWrapper do
 
         Rails.application.credentials.google_map_key = google_map_key
 
-        stub_request(:get, "#{expected_host}/#{expected_get_geo_path}?address=#{address}&key=#{google_map_key}").
-          with(
+        stub_request(:get, "#{expected_host}/#{expected_get_geo_path}?address=#{address}&key=#{google_map_key}")
+          .with(
             headers: {
-              'Accept'=>'application/json',
-              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-              'Content-Type'=>'application/json',
-              'User-Agent'=>'Weather App Agent'
-            }).
-          to_return(status: 200, body: json_response_str, headers: {})
-
+              'Accept' => 'application/json',
+              'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'Content-Type' => 'application/json',
+              'User-Agent' => 'Weather App Agent'
+            }
+          )
+          .to_return(status: 200, body: json_response_str, headers: {})
 
         actual_address_info = WrapperServices::AddressWrapper.new.fetch_geo_info(address: address)
 

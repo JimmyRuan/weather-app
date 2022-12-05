@@ -21,7 +21,9 @@ module WrapperServices
       WrapperHelper.handle_error_from_response(response)
       json_response = WrapperHelper.parse_json_response(response)
 
-      raise WrapperErrors::Errors::NoValidGeoInfoFound if json_response[:results].blank? || !json_response[:results].is_a?(Array)
+      if json_response[:results].blank? || !json_response[:results].is_a?(Array)
+        raise WrapperErrors::Errors::NoValidGeoInfoFound
+      end
 
       raise WrapperErrors::Errors::AmbiguousAddressProvided if json_response[:results].count > 1
 
@@ -62,7 +64,6 @@ module WrapperServices
 
         return [zip_code, country_code] if zip_code.present? && country_code.present?
       end
-
 
       raise WrapperErrors::Errors::CannotDetermineZipCodeOrCountryCode
     end

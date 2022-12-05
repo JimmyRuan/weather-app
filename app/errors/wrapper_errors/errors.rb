@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module WrapperErrors
   module Errors; end
 end
@@ -63,9 +64,6 @@ module WrapperErrors::Errors
     end
   end
 
-
-
-
   ### Below are the errors for Google Map errors
 
   class NoInvalidGoogleMapApiKey < AddressWrapperError
@@ -97,5 +95,4 @@ module WrapperErrors::Errors
       'Cannot determine the zip code and/or country code'
     end
   end
-
 end
